@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">PopularMovies</string>
+    <string name="error_message">An error has occured!</string>
+    <string name="action_sort_criterion"> Sort By</string>
+    <string name="action_sort_popular">Most Popular</string>
+    <string name="action_sort_user_ratings">Highest Rated</string>
+    <string name="user_rating">Rating:</string>
 </resources>
