@@ -4,4 +4,4 @@ Displays a list of movie posters in its main screen.
 When the user clicks/pads on a poster a new screen appears with details about the movie.
 
 Notes:
-I am placing the API key in a build.grade file which will be placed in the gitignore file for hiding.
+I am placing the API key for The Movie Database in a private gradle.properties file.
