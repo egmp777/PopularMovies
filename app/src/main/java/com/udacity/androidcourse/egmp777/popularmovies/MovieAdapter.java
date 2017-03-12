@@ -1,16 +1,11 @@
 package com.udacity.androidcourse.egmp777.popularmovies;
 
 import android.content.Context;
-import android.media.Image;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.udacity.androidcourse.egmp777.popularmovies.utils.MovieDataUtils;
@@ -59,7 +54,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         public void onClick(View view) {
             int adapterPosition = getAdapterPosition();
             String movieData = mMovieData[adapterPosition];
-            String [] selectedMovieArray = getOneMovieDataArray(movieData);
+            String [] selectedMovieArray = MovieDataUtils.buildMovieDataArray(movieData);
              mTouchHandler.onClick(movieData);
         }
     }
@@ -104,17 +99,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.MovieAdapter
         Picasso.with(context).load(poster).into(movieAdapterViewHolder.mMovieImageView);
     }
 
-    /**
-     * Gets the data for the selected movie in a String array
-     * @param movieData
-     * @return The String array with the selected movie's details data
-     */
 
-    public String [] getOneMovieDataArray(String movieData){
-
-        String [] oneMovieDataArray = movieData.split("-");
-        return oneMovieDataArray;
-    }
     /**
      * This method simply returns the number of items to display. It is used behind the scenes
      * to help layout our Views and for animations.

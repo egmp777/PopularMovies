@@ -16,7 +16,9 @@ public final class MovieDataUtils {
      */
     public static String [] buildMovieDataArray(String movieData){
 
-        String [] oneMovieDataArray = movieData.split("\n");
+        String [] oneMovieDataArray;
+        oneMovieDataArray = movieData.split("\n");
         return oneMovieDataArray;
     }
+
 }

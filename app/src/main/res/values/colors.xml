@@ -3,9 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorTitleFont">#F5E4E4E1</color>
+    <color name="colorTitleFont">#f5fcfcf9</color>
     <color name="colorBackgroundText">#F5175004</color>
-    <color name="colorDarkBackground">#F5060606</color>
-    <color name="colorHighlightField">#f50ea652</color>
+    <color name="colorDarkBackground">#d9500d93</color>
+    <color name="colorHighlightField">#f50d481b</color>
 
 </resources>

@@ -4,6 +4,4 @@ Displays a list of movie posters in its main screen.
 When the user clicks/pads on a poster a new screen appears with details about the movie.
 
 Notes:
-Please place the The Movie Database API_KEY in the MainActivity class’s loadMovieData() method as a field called apiKey, which will then be passed to the execute async task as follows:
- 
-        new FetcMovieTask().execute(apiKey);
+I am placing the API key in a build.grade file which will be placed in the gitignore file for hiding.

@@ -1,10 +1,11 @@
 package com.udacity.androidcourse.egmp777.popularmovies.utils;
 
-import android.content.Context;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.util.Log;
+
+import com.udacity.androidcourse.egmp777.popularmovies.MainActivity;
+import com.udacity.androidcourse.egmp777.popularmovies.R;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -13,6 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import static android.provider.Settings.Global.getString;
 
 
 /**
@@ -37,6 +39,7 @@ public final class NetworkUtils {
      */
     public static URL buildUrl(String criterion, String api_key) {
 
+
         if (criterion == null || criterion == ""){
             criterion = DEFAULT_SORT_CRITERION;
         }
@@ -51,7 +54,6 @@ public final class NetworkUtils {
         }
 
         Log.v(TAG, "Built URI " + url);
-
         return url;
     }
 
@@ -90,8 +92,17 @@ public final class NetworkUtils {
      */
     public static boolean networkConnectionAvailable(ConnectivityManager cm) {
 
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        return netInfo.isAvailable() && netInfo.isConnected();
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        }
+        catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+
+        return false;
+
     }
 
 }

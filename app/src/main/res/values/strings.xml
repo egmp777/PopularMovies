@@ -1,8 +1,12 @@
 <resources>
     <string name="app_name">PopularMovies</string>
-    <string name="error_message">An error has occured!</string>
+    <string name="error_message">An error has occurred!</string>
     <string name="action_sort_criterion"> Sort By</string>
     <string name="action_sort_popular">Most Popular</string>
     <string name="action_sort_user_ratings">Highest Rated</string>
     <string name="user_rating">Rating:</string>
+    <string name="movie_poster">Moview Poster</string>
+    <string name="connection_error">Oops...Problem connecting to the internet!</string>
+    <string name="sort_popular">popular</string>
+    <string name="sort_top_rated">top_rated</string>
 </resources>

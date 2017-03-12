@@ -6,9 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.PipedOutputStream;
-import java.net.HttpURLConnection;
-
 /**
  * Created by elena on 3/7/17.
  * This is a utility class with methods to handle the JSON response Data

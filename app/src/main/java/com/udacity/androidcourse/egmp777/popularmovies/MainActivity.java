@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.renderscript.Sampler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PopupMenu;
+import android.util.Base64;
+import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -19,7 +21,6 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.udacity.androidcourse.egmp777.popularmovies.utils.MovieDataUtils;
 import com.udacity.androidcourse.egmp777.popularmovies.utils.NetworkUtils;
 import com.udacity.androidcourse.egmp777.popularmovies.utils.TheMovieDBJsonUtils;
 
@@ -30,11 +31,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         PopupMenu.OnMenuItemClickListener{
     private RecyclerView mRecyclerView;
 
-    private final String CONNECTION_ERROR = "Oops...there is no network connection to the Internet";
+
 
     private ImageView imageView;
 
     private MovieAdapter mMovieAdapter;
+
+    private static final String API_KEY = BuildConfig.API_KEY;
+
 
     private TextView mErrorMessageDisplay;
 
@@ -43,8 +47,6 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private String movieSelectionCriterion;
 
     private GridLayoutManager gridLayoutManager;
-    // For testing
-    private static final String TAG  = "OVERVIEW";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +55,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview_movie_list);
         mErrorMessageDisplay = (TextView) findViewById(R.id.tv_error_message_display);
         mLoadingIndicator = (ProgressBar) findViewById(R.id.pb_loading_indicator);
-        int numberOfColumns = 2;
-        gridLayoutManager = new GridLayoutManager(this, numberOfColumns);
+        //int numberOfColumns = 2;
+        gridLayoutManager = new GridLayoutManager(this, numberOfColumns());
         mRecyclerView.setLayoutManager(gridLayoutManager);
         mRecyclerView.setHasFixedSize(true);
         mMovieAdapter = new MovieAdapter(this);
@@ -62,14 +64,21 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         loadMovieData();
     }
 
+    private int numberOfColumns() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        // You can change this divider to adjust the size of the poster
+        int widthDivider = 400;
+        int width = displayMetrics.widthPixels;
+        int nColumns = width / widthDivider;
+        if (nColumns < 2) return 2;
+        return nColumns;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        /* Use AppCompatActivity's method getMenuInflater to get a handle on the menu inflater */
         MenuInflater inflater = getMenuInflater();
-        /* Use the inflater's inflate method to inflate our menu layout to this menu */
         inflater.inflate(R.menu.sort_criterion, menu);
-        /* Return true so that the menu is displayed in the Toolbar */
         return true;
     }
 
@@ -88,7 +97,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         return super.onOptionsItemSelected(item);
     }
 
-    public void showPopup(View view){
+    private void showPopup(View view){
         PopupMenu popupMenu = new PopupMenu(this,view);
         MenuInflater inflater = popupMenu.getMenuInflater();
         inflater.inflate(R.menu.sort_criterion_options, popupMenu.getMenu());
@@ -100,13 +109,12 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     public boolean onMenuItemClick(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_sort_popularity:
-                //movieSelectionCriterion = "popularity.desc";
-                movieSelectionCriterion = "popular";
+                movieSelectionCriterion = getString(R.string.sort_popular);
                 mMovieAdapter.setMovieData(null);
                 loadMovieData();
                 return true;
             case R.id.action_sort_rating:
-                movieSelectionCriterion = "top_rated";
+                movieSelectionCriterion = getString(R.string.sort_top_rated);
                 mMovieAdapter.setMovieData(null);
                 loadMovieData();
                 return true;
@@ -119,14 +127,14 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
     private void loadMovieData() {
         showMovieDataView();
         //TODO: place the api_key here
-        //String apiKey = "";
-        //new FetcMovieTask().execute(apiKey);
+        new FetcMovieTask().execute(API_KEY);
     }
+
+
 
     @Override
     public void onClick(String movieData){
-        String [] testArray = MovieDataUtils.buildMovieDataArray(movieData);
-        String overview = testArray[1];
+
         Context context = this;
         Class destinationClass = MovieDetails.class;
         Intent intentToStartDetailActivity = new Intent(context, destinationClass);
@@ -180,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
         protected String[] doInBackground(String... params) {
             ConnectivityManager cm =
                     (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            if(NetworkUtils.networkConnectionAvailable(cm) == true) {
+            if(NetworkUtils.networkConnectionAvailable(cm) ) {
 
 
 
@@ -222,8 +230,8 @@ public class MainActivity extends AppCompatActivity implements MovieAdapter.Movi
                 mMovieAdapter.setMovieData(movieData);
             } else {
                 if(!haveConnection){
-                    Toast.makeText(MainActivity.this, "no internet!", Toast.LENGTH_SHORT).show();
-                    mErrorMessageDisplay.setText("Opps, there is no internet connection right now!");
+                    Toast.makeText(MainActivity.this, getString(R.string.connection_error), Toast.LENGTH_SHORT).show();
+                    mErrorMessageDisplay.setText(getString(R.string.connection_error));
 
                 }
                 showErrorMessage();
